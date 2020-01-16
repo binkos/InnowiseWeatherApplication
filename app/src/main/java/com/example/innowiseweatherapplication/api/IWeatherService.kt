@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface IWeatherService {
 
-    @GET("")
+    @GET("forecast?appid=${WeatherRetrofitApi.API_KEY}")
     fun getWeather(@Query("lat") lat: Long,@Query("lon") lon: Long):Observable<WeatherClass>
 
 }
