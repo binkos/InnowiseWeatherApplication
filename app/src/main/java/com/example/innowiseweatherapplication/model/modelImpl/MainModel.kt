@@ -1,10 +1,15 @@
 package com.example.innowiseweatherapplication.model.modelImpl
 
+import com.example.innowiseweatherapplication.api.WeatherRetrofitApi
 import com.example.innowiseweatherapplication.model.IModel
+import com.example.innowiseweatherapplication.model.entity.WeatherClass
+import io.reactivex.Observable
+
 
 class MainModel:IModel {
-    override fun getWeather() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getWeather(lat:Double,lon:Double): Observable<WeatherClass> {
+        println("'''")
+        return WeatherRetrofitApi.provideWeather(lat, lon)
     }
 
 }

@@ -13,12 +13,13 @@ import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.innowiseweatherapplication.R
+import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.*
 
 class MainActivity : AppCompatActivity(), IMainView {
-    val PERMISSION_ID = 42
+    private val PERMISSION_ID = 42
     private lateinit var mFusedLocationClient:FusedLocationProviderClient
     private lateinit var mainPresenter:MainPresenter
 
@@ -27,9 +28,10 @@ class MainActivity : AppCompatActivity(), IMainView {
         setContentView(R.layout.activity_main)
         mainPresenter = MainPresenter(this)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        println("BeforeGetLastLocation")
+
         getLastLocation()
-        println("AfterGetLastLocation")
+
+
     }
 
     override fun showError() {
@@ -37,15 +39,15 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        println("Progress is showed")
     }
 
     override fun hideProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        println("Progress is hided")
     }
 
-    override fun showLoadedWeather() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showLoadedWeather(provideWeather: WeatherClass?) {
+        println(provideWeather?.list?.get(0)?.main?.temp)
     }
 
     override fun showNotConnectionMessage() {
@@ -61,9 +63,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                         if (location == null) {
                           requestNewLocationData()
                         } else {
-                            println("current latitude "+location.latitude)
-                            println("current longitude "+location.longitude)
-                          mainPresenter.getData()
+                            mainPresenter.getData(location.latitude,location.longitude)
                         }
                 }
             }else{
@@ -75,6 +75,20 @@ class MainActivity : AppCompatActivity(), IMainView {
             requestPermission()
         }
     }
+
+    override fun openTodayWeather() {
+
+    }
+
+
+
+    override fun openForecastWeather() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+
+
 
     override fun checkPermission():Boolean {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&

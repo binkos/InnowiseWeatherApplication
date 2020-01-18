@@ -1,5 +1,7 @@
 package com.example.innowiseweatherapplication.presenter
 
 interface IMainPresenterInterface {
-    fun getData()
+    fun getData(lat:Double,lon:Double)
+
+
 }
