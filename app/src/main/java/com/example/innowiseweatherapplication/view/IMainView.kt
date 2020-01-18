@@ -1,5 +1,6 @@
 package com.example.innowiseweatherapplication.view
 
+import androidx.fragment.app.Fragment
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 
 interface IMainView {
@@ -12,6 +13,6 @@ fun checkPermission(): Boolean
 fun requestPermission()
 fun isLocationEnabled():Boolean
 fun getLastLocation()
-fun openTodayWeather()
-fun openForecastWeather()
+fun openTodayWeather(fragment: Fragment)
+fun openForecastWeather(fragment: Fragment)
 }

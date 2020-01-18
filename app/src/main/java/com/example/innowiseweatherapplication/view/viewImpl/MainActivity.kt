@@ -12,16 +12,21 @@ import android.os.Looper
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
+import com.example.innowiseweatherapplication.presenter.presenterImpl.TabsPagerAdapter
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), IMainView {
     private val PERMISSION_ID = 42
     private lateinit var mFusedLocationClient:FusedLocationProviderClient
     private lateinit var mainPresenter:MainPresenter
+    private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +35,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         getLastLocation()
-
+        viewPager = findViewById(R.id.view_pager)
 
     }
 
@@ -76,19 +81,17 @@ class MainActivity : AppCompatActivity(), IMainView {
         }
     }
 
-    override fun openTodayWeather() {
+    override fun openTodayWeather(fragment: Fragment) {
+        val viewPagerAdapter = TabsPagerAdapter(supportFragmentManager)
+        viewPager.adapter = viewPagerAdapter
 
     }
 
 
 
-    override fun openForecastWeather() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun openForecastWeather(fragment: Fragment) {
+
     }
-
-
-
-
 
     override fun checkPermission():Boolean {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
