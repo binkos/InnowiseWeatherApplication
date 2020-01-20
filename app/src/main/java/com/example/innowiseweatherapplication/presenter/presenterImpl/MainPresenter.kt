@@ -29,14 +29,10 @@ class MainPresenter(private val view:IMainView):
                 }
             }
             .subscribe{
+                println("HERE")
                 weather = it
-                val fragment =
-                    TodayFragment()
-                val bundle = Bundle()
-                bundle.putInt("SIZE",weather.list!!.size)
-                fragment.arguments = bundle
                 view.hideProgress()
-                view.openTodayWeather(fragment)
+                view.openTodayWeather(weather)
             }
 
     }

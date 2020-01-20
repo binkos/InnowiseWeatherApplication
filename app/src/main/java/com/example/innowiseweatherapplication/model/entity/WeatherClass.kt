@@ -146,7 +146,7 @@ data class WeatherClass (
             var speed = 0f
             @SerializedName("deg")
             @Expose
-            var deg = 0f
+            var deg = 0
 
         }
 
@@ -158,7 +158,15 @@ data class WeatherClass (
 
     }
 
-    class City {
-    }
+    class City (@SerializedName("id")
+                @Expose
+                var id: Int = 0,
+                @SerializedName("name")
+                @Expose
+                var name: String = "",
+                @SerializedName("country")
+                @Expose
+                var country: String = ""
+                )
 
 }

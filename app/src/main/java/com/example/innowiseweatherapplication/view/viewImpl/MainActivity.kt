@@ -15,27 +15,28 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.innowiseweatherapplication.R
+import com.example.innowiseweatherapplication.adapter.TabsPagerAdapter
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
-import com.example.innowiseweatherapplication.presenter.presenterImpl.TabsPagerAdapter
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity(), IMainView {
     private val PERMISSION_ID = 42
     private lateinit var mFusedLocationClient:FusedLocationProviderClient
     private lateinit var mainPresenter:MainPresenter
     private lateinit var viewPager: ViewPager
+    lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mainPresenter = MainPresenter(this)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         getLastLocation()
         viewPager = findViewById(R.id.view_pager)
+        tabLayout = findViewById(R.id.tabs)
 
     }
 
@@ -81,14 +82,17 @@ class MainActivity : AppCompatActivity(), IMainView {
         }
     }
 
-    override fun openTodayWeather(fragment: Fragment) {
-        val viewPagerAdapter = TabsPagerAdapter(supportFragmentManager)
+    override fun openTodayWeather(weatherClass: WeatherClass) {
+        val viewPagerAdapter =
+            TabsPagerAdapter(
+                supportFragmentManager,weatherClass
+            )
+
         viewPager.adapter = viewPagerAdapter
-
+        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_sun_white)
+        tabLayout.getTabAt(1)?.setIcon(R.drawable.weather_partly_cloudy)
     }
-
-
-
     override fun openForecastWeather(fragment: Fragment) {
 
     }

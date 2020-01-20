@@ -13,6 +13,6 @@ fun checkPermission(): Boolean
 fun requestPermission()
 fun isLocationEnabled():Boolean
 fun getLastLocation()
-fun openTodayWeather(fragment: Fragment)
+fun openTodayWeather(weatherClass: WeatherClass)
 fun openForecastWeather(fragment: Fragment)
 }

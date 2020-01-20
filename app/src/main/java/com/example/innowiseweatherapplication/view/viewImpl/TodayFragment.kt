@@ -16,8 +16,14 @@ class TodayFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.today_weather_fragment_view,container,false)
-        println("Today Fragment")
-
+        println(arguments?.getInt("HUMIDITY"))
+        println(arguments?.getFloat("SPEED"))
+        println(arguments?.getInt("DEG"))
+        println(arguments?.getFloat("TEMP"))
+        println(arguments?.getString("WEATHER_NAME"))
+        println(arguments?.getString("COUNTRY_NAME"))
+        println(arguments?.getString("CITY_NAME"))
+        println(arguments?.getInt("PRESSURE"))
         return view
     }
 
