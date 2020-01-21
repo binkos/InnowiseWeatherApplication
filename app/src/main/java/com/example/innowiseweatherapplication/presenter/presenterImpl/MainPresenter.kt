@@ -34,7 +34,6 @@ class MainPresenter(private val view:IMainView):
                 view.hideProgress()
                 view.openTodayWeather(weather)
             }
-
     }
 
 

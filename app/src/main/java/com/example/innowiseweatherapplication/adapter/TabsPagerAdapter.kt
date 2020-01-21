@@ -9,7 +9,7 @@ import com.example.innowiseweatherapplication.view.viewImpl.ErrorFragment
 import com.example.innowiseweatherapplication.view.viewImpl.ForecastFragment
 import com.example.innowiseweatherapplication.view.viewImpl.TodayFragment
 
-class TabsPagerAdapter(fragmentManager: FragmentManager,val weatherClass: WeatherClass): FragmentPagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClass: WeatherClass): FragmentPagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         when(position){
