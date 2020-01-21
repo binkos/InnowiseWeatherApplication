@@ -12,10 +12,10 @@ import android.os.Looper
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.adapter.TabsPagerAdapter
+import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
 import com.example.innowiseweatherapplication.view.IMainView
@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity(), IMainView {
         getLastLocation()
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
+
+
+
 
     }
 
@@ -82,19 +85,16 @@ class MainActivity : AppCompatActivity(), IMainView {
         }
     }
 
-    override fun openTodayWeather(weatherClass: WeatherClass) {
+    override fun openTodayWeather(weatherClass: WeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>) {
         val viewPagerAdapter =
             TabsPagerAdapter(
-                supportFragmentManager,weatherClass
+                supportFragmentManager,weatherClass,arrayList
             )
 
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_sun_white)
         tabLayout.getTabAt(1)?.setIcon(R.drawable.weather_partly_cloudy)
-    }
-    override fun openForecastWeather(fragment: Fragment) {
-
     }
 
     override fun checkPermission():Boolean {
@@ -152,7 +152,6 @@ class MainActivity : AppCompatActivity(), IMainView {
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
-//            mainPresenter.getData()
               println("current latitude " + mLastLocation.latitude)
         }
     }

@@ -1,6 +1,7 @@
 package com.example.innowiseweatherapplication.view
 
 import androidx.fragment.app.Fragment
+import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 
 interface IMainView {
@@ -13,6 +14,5 @@ fun checkPermission(): Boolean
 fun requestPermission()
 fun isLocationEnabled():Boolean
 fun getLastLocation()
-fun openTodayWeather(weatherClass: WeatherClass)
-fun openForecastWeather(fragment: Fragment)
+fun openTodayWeather(weatherClass: WeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>)
 }

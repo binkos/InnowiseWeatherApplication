@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 
-class WeatherRecyclerAdapter(val context:Context,val list:ArrayList<WeatherClass.InfoWeatherClass.Weather>): RecyclerView.Adapter<WeatherRecyclerAdapter.WeatherViewHolder>() {
+class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<WeatherClass.InfoWeatherClass.Weather>): RecyclerView.Adapter<WeatherRecyclerAdapter.WeatherViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         return WeatherViewHolder(parent.inflate(R.layout.weather_item_list))
     }
@@ -25,6 +25,7 @@ class WeatherRecyclerAdapter(val context:Context,val list:ArrayList<WeatherClass
 
     class WeatherViewHolder(view:View):RecyclerView.ViewHolder(view){
             val r = view.findViewById(R.id.weather_icon_ImageView) as ImageView
+
         public fun bind(str:String){
 
         }

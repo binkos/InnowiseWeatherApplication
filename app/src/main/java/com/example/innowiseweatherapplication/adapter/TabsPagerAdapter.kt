@@ -4,12 +4,13 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.view.viewImpl.ErrorFragment
 import com.example.innowiseweatherapplication.view.viewImpl.ForecastFragment
 import com.example.innowiseweatherapplication.view.viewImpl.TodayFragment
 
-class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClass: WeatherClass): FragmentPagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClass: WeatherClass,val arrayList: ArrayList<RecyclerItemWeatherClass>): FragmentPagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         when(position){
@@ -24,10 +25,18 @@ class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClas
                 bundle.putString("COUNTRY_NAME", weatherClass.city!!.country)
                 bundle.putInt("PRESSURE", weatherClass.list!![0].main!!.pressure)
                 bundle.putString("CITY_NAME", weatherClass.city!!.name)
+
+                fragment.arguments = bundle
+
+                return fragment
+            }
+            1->{
+                val fragment = ForecastFragment()
+                val bundle = Bundle()
+                bundle.putParcelableArrayList("ARRAY",arrayList)
                 fragment.arguments = bundle
                 return fragment
             }
-            1->return ForecastFragment()
         }
         return ErrorFragment()
     }

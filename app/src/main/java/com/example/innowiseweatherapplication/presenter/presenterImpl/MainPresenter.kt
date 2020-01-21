@@ -2,6 +2,8 @@ package com.example.innowiseweatherapplication.presenter.presenterImpl
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import com.example.innowiseweatherapplication.adapter.WeatherRecyclerAdapter
+import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.model.modelImpl.MainModel
 import com.example.innowiseweatherapplication.presenter.IMainPresenterInterface
@@ -28,11 +30,15 @@ class MainPresenter(private val view:IMainView):
                     println("we got ${e.cause}")
                 }
             }
-            .subscribe{
+            .subscribe{ it ->
                 println("HERE")
                 weather = it
+                val arrayList = ArrayList<RecyclerItemWeatherClass>()
+                it.list?.forEach {
+                    arrayList.add(RecyclerItemWeatherClass(it.weather[0].icon,it.main!!.temp-273,it.weather[0].main,it.dtTxt as String))
+                }
                 view.hideProgress()
-                view.openTodayWeather(weather)
+                view.openTodayWeather(weather,arrayList)
             }
     }
 
