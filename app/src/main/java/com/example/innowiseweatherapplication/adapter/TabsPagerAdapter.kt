@@ -17,10 +17,11 @@ class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClas
             0->{
                 val fragment = TodayFragment()
                 val bundle = Bundle()
+
                 bundle.putInt("HUMIDITY", weatherClass.list!![0].main!!.humidity)
                 bundle.putFloat("SPEED", weatherClass.list!![0].wind!!.speed)
                 bundle.putInt("DEG", weatherClass.list!![0].wind!!.deg)
-                bundle.putFloat("TEMP", weatherClass.list!![0].main!!.temp)
+                bundle.putFloat("TEMP", weatherClass.list!![0].main!!.temp-273)
                 bundle.putString("WEATHER_NAME", weatherClass.list!![0].weather[0].main)
                 bundle.putString("COUNTRY_NAME", weatherClass.city!!.country)
                 bundle.putInt("PRESSURE", weatherClass.list!![0].main!!.pressure)

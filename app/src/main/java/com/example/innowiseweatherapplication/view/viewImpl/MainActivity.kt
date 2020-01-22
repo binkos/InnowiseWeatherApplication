@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -38,13 +39,14 @@ class MainActivity : AppCompatActivity(), IMainView {
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
 
-
-
-
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+        println("$isConnected hello")
     }
 
     override fun showError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       println("Error is handled")
     }
 
     override fun showProgress() {
@@ -64,24 +66,26 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun getLastLocation() {
-        if (checkPermission()){
-            if (isLocationEnabled()){
-                mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
+        if (mainPresenter.isConnection(getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)){
+            if (checkPermission()){
+                if (isLocationEnabled()){
+                    mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
 
-                        val location: Location? = task.result
-                        if (location == null) {
-                          requestNewLocationData()
-                        } else {
-                            mainPresenter.getData(location.latitude,location.longitude)
-                        }
+                            val location: Location? = task.result
+                            if (location == null) {
+                              requestNewLocationData()
+                            } else {
+                                mainPresenter.getData(location.latitude,location.longitude)
+                            }
+                    }
+                }else{
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
                 }
             }else{
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        }else{
             println("beforeCheckingPermission")
             requestPermission()
+            }
         }
     }
 
@@ -153,6 +157,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
               println("current latitude " + mLastLocation.latitude)
+            getLastLocation()
         }
     }
 

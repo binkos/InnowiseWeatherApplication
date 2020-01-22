@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.innowiseweatherapplication.R
+import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 
 class ForecastFragment:Fragment() {
 
@@ -17,6 +17,11 @@ class ForecastFragment:Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.forecast_weather_fragment_view,container,false)
         println("Forecast Fragment")
+        arguments!!.getParcelableArrayList<RecyclerItemWeatherClass>("ARRAY")?.forEach { it ->
+            run {
+                    println(it.name)
+            }
+        }
 
         return view
     }
