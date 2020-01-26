@@ -25,6 +25,7 @@ import com.example.innowiseweatherapplication.adapter.TabsPagerAdapter
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
+import com.example.innowiseweatherapplication.model.modelImpl.SomeTypesHelper
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.*
@@ -41,7 +42,8 @@ class MainActivity : AppCompatActivity(), IMainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mainPresenter = MainPresenter(this)
+        val someTypesHelper = SomeTypesHelper(this)
+        mainPresenter = MainPresenter(this,someTypesHelper)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getLastLocation()
         viewPager = findViewById(R.id.view_pager)

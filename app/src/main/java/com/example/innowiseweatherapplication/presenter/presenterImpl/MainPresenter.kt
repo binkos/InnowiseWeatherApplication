@@ -8,6 +8,7 @@ import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherCl
 import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.model.modelImpl.MainModel
+import com.example.innowiseweatherapplication.model.modelImpl.SomeTypesHelper
 import com.example.innowiseweatherapplication.presenter.IMainPresenterInterface
 import com.example.innowiseweatherapplication.view.IMainView
 import io.reactivex.Observable
@@ -17,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainPresenter(private val view:IMainView):
+class MainPresenter(private val view:IMainView,private val someTypesHelper: SomeTypesHelper):
     IMainPresenterInterface {
     private val model = MainModel()
     lateinit var weather:WeatherClass
