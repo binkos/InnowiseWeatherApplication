@@ -5,23 +5,31 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.view.View
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.adapter.TabsPagerAdapter
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
+import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.*
 import com.google.android.material.tabs.TabLayout
+import java.util.*
 
 class MainActivity : AppCompatActivity(), IMainView {
     private val PERMISSION_ID = 42
@@ -39,25 +47,28 @@ class MainActivity : AppCompatActivity(), IMainView {
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
 
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-        println("$isConnected hello")
     }
 
     override fun showError() {
+       findViewById<TextView>(R.id.errorMessage).visibility=View.VISIBLE
+       findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
        println("Error is handled")
     }
 
     override fun showProgress() {
+        findViewById<TextView>(R.id.errorMessage).visibility=View.INVISIBLE
+        findViewById<Button>(R.id.retryBtn).visibility=View.INVISIBLE
+        findViewById<ProgressBar>(R.id.progressBar).visibility=View.VISIBLE
         println("Progress is showed")
     }
 
     override fun hideProgress() {
+        findViewById<ProgressBar>(R.id.progressBar).visibility=View.GONE
         println("Progress is hided")
     }
 
     override fun showLoadedWeather(provideWeather: WeatherClass?) {
+
         println(provideWeather?.list?.get(0)?.main?.temp)
     }
 
@@ -66,47 +77,55 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun getLastLocation() {
-        if (checkPermission()){
-            if (isLocationEnabled()){
-                mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
-                        val location: Location? = task.result
-                        if (location == null) {
-                          requestNewLocationData()
-                        } else {
-                            mainPresenter.getData(location.latitude,location.longitude)
-                        }
+            if (checkPermission()){
+                if (isLocationEnabled()){
+                    mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
+                            val location: Location? = task.result
+                            if (location == null) {
+                              requestNewLocationData()
+
+                            } else {
+                                val geocode = Geocoder(this, Locale.ENGLISH)
+                                val addresses:List<Address> = geocode.getFromLocation(location.latitude,location.longitude,1)
+                                if (addresses.isNotEmpty()) mainPresenter.getData(addresses[0].locality)
+                            }
+                    }
+                }else{
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
                 }
             }else{
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
+            println("beforeCheckingPermission")
+            requestPermission()
             }
-        }else{
-        println("beforeCheckingPermission")
-        requestPermission()
-        }
     }
 
-    override fun openTodayWeather(weatherClass: WeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>) {
+    override fun openTodayWeather(todayWeatherClass: TodayWeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>) {
+        findViewById<ViewPager>(R.id.view_pager).visibility = View.VISIBLE
+        findViewById<View>(R.id.divider_activity_main).visibility = View.VISIBLE
+        findViewById<TabLayout>(R.id.tabs).visibility = View.VISIBLE
+
         val viewPagerAdapter =
             TabsPagerAdapter(
-                supportFragmentManager,weatherClass,arrayList
+                supportFragmentManager,todayWeatherClass,arrayList
             )
 
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
-        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_sun_white)
-        tabLayout.getTabAt(1)?.setIcon(R.drawable.weather_partly_cloudy)
+        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_01d_w)
+        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_03d_w)
 
         tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                println("${tab?.position} is selected")
+//                println("${tab?.position} is selected")
             }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+//                println("${tab?.position} is unselected")
+            }
+
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 println("${tab?.position} is reselected")
 
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                println("${tab?.position} is unselected")
             }
         })
 
@@ -173,4 +192,13 @@ class MainActivity : AppCompatActivity(), IMainView {
         }
     }
 
+    fun isInternetConnection()= run {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = cm.activeNetworkInfo
+        activeNetwork?.isConnectedOrConnecting == true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 }

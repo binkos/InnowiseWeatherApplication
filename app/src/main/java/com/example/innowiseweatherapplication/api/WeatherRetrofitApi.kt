@@ -2,10 +2,9 @@ package com.example.innowiseweatherapplication.api
 
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import io.reactivex.Observable
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 
 object WeatherRetrofitApi {
     const val API_KEY = "bd4dc296a14bbd46eb088fb9125aca73"
@@ -16,8 +15,8 @@ object WeatherRetrofitApi {
 
     private val api = retrofit.create(IWeatherService::class.java)
 
-    fun provideWeather(lat:Double,lon:Double): Observable<WeatherClass> {
-        return api.getWeather(lat, lon)
+    fun provideWeather(cityName:String): Observable<WeatherClass> {
+        return api.getWeather(cityName)
 
 //        val date: Date? = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT).parse("")
 //        val calendar:Calendar = Calendar.getInstance()

@@ -5,5 +5,5 @@ import io.reactivex.Observable
 
 
 interface IModel {
-    fun getWeather(lat:Double,lon:Double): Observable<WeatherClass>
+    fun getWeather(cityName:String): Observable<WeatherClass>
 }

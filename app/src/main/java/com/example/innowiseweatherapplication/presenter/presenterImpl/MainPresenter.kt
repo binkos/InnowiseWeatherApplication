@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
+import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.model.modelImpl.MainModel
 import com.example.innowiseweatherapplication.presenter.IMainPresenterInterface
@@ -22,14 +23,13 @@ class MainPresenter(private val view:IMainView):
     lateinit var weather:WeatherClass
 
     @SuppressLint("CheckResult")
-    override fun getData(lat:Double, lon:Double) {
+    override fun getData(cityName:String) {
         view.showProgress()
-        val dataObservable: Observable<WeatherClass> = model.getWeather(lat, lon)
+        val dataObservable: Observable<WeatherClass> = model.getWeather(cityName)
 
         dataObservable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( {it ->
-                println("HERE")
                 weather = it
                 val arrayList = ArrayList<RecyclerItemWeatherClass>()
                 arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE,day="Today"))
@@ -37,7 +37,6 @@ class MainPresenter(private val view:IMainView):
 
                     val array = parseFunction(it.dtTxt!!)
                     val parceledDay = anotherParcelFunction(array[1])
-
                     if (array[0]==0&&arrayList.size!=1) arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE, day = parceledDay))
                     if (array[0]==21){
                     arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.WEATHER_TYPE_WITHOUT_DIVIDERS,it.weather[0].icon,
@@ -49,8 +48,20 @@ class MainPresenter(private val view:IMainView):
                     }
 
                 }
+
+                val todayWeatherClass = TodayWeatherClass(
+                    it.list!![0].main!!.humidity,
+                    it.list!![0].wind!!.speed,
+                    it.list!![0].wind!!.deg,
+                    it.list!![0].main!!.tempKf,
+                    it.list!![0].weather[0].main,
+                    it.list!![0].weather[0].icon,
+                    it.city!!.country,
+                    it.list!![0].main!!.pressure,
+                    it.city!!.name
+                )
                 view.hideProgress()
-                view.openTodayWeather(weather,arrayList)
+                view.openTodayWeather(todayWeatherClass,arrayList)
             },
                 {t ->
                     println(t.message)
@@ -94,7 +105,6 @@ class MainPresenter(private val view:IMainView):
         val date: Date = formatter.parse(dateInString) as Date
         val calendar = Calendar.getInstance()
         calendar.time = date
-        println(calendar.get(Calendar.HOUR_OF_DAY))
         val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         return intArrayOf(hourOfDay,dayOfWeek)

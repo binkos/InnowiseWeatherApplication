@@ -1,5 +1,6 @@
 package com.example.innowiseweatherapplication.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
+import com.squareup.picasso.Picasso
 import kotlin.math.roundToInt
 
 class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<RecyclerItemWeatherClass>):
@@ -32,11 +34,46 @@ class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<Rec
         when(item.type){
             RecyclerItemWeatherClass.HEADER_TYPE->(holder as HeaderViewHolder).tv.text = item.day
 
-            RecyclerItemWeatherClass.WEATHER_TYPE->
-                (holder as WeatherViewHolder).bind(1,item.icon,item.temp,item.name,item.day,item.hour)
+            RecyclerItemWeatherClass.WEATHER_TYPE->{
 
-            RecyclerItemWeatherClass.WEATHER_TYPE_WITHOUT_DIVIDERS->
-                (holder as WeatherViewHolder).bind(1,item.icon,item.temp,item.name,item.day,item.hour)
+               val icon =when(item.icon){
+                   "04d"->{R.drawable.ic_04d}
+                   "04n"->{R.drawable.ic_04n}
+                   "01d"->{R.drawable.ic_01d}
+                   "01n"->{R.drawable.ic_01n}
+                   "10d"->{R.drawable.ic_10d}
+                   "10n"->{R.drawable.ic_10n}
+                   "13d"->{R.drawable.ic_13d}
+                   "13n"->{R.drawable.ic_13n}
+                   "03d"->{R.drawable.ic_03d}
+                   "03n"->{R.drawable.ic_03n}
+
+                    else->{2}
+                }
+
+                (holder as WeatherViewHolder).bind(icon,item.temp,item.name,item.hour)
+
+
+
+            }
+            RecyclerItemWeatherClass.WEATHER_TYPE_WITHOUT_DIVIDERS->{
+                val icon =when(item.icon){
+                    "04d"->{R.drawable.ic_04d}
+                    "04n"->{R.drawable.ic_04n}
+                    "01d"->{R.drawable.ic_01d}
+                    "01n"->{R.drawable.ic_01n}
+                    "10d"->{R.drawable.ic_10d}
+                    "10n"->{R.drawable.ic_10n}
+                    "13d"->{R.drawable.ic_13d}
+                    "13n"->{R.drawable.ic_13n}
+                    "03d"->{R.drawable.ic_03d}
+                    "03n"->{R.drawable.ic_03n}
+
+                    else->{2}
+                }
+
+                (holder as WeatherViewHolder).bind(icon,item.temp,item.name,item.hour)
+            }
         }
     }
 
@@ -61,7 +98,10 @@ class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<Rec
             private val weatherInfoTv = view.findViewById(R.id.weather_info_TextView) as TextView
             private var tempInfoTV = view.findViewById(R.id.temp_TextView) as TextView
 
-        fun bind(dayToday: Int,icon:String,temp:Float,name:String,day:String,hour:Int){
+        @SuppressLint("SetTextI18n")
+        fun bind(icon:Int, temp:Float, name:String, hour:Int){
+
+            Picasso.get().load(icon).error(R.drawable.sun).into(weathIcon)
             var hourTime = "${hour}.00"
             if (hourTime.length==4) hourTime = "0$hourTime"
             timeTv.text = hourTime
@@ -74,24 +114,7 @@ class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<Rec
         val tv = itemView.findViewById(R.id.day_TextView) as TextView
     }
 
-    class ErrorViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        val tv = itemView.findViewById(R.id.day_TextView) as TextView
-    }
-
-//    private fun checkLinearPos(position: Int):Boolean{
-//        var bol = false
-//        if (position==0) bol = true
-//        if (position==list.size-1) bol = false
-//        println("current time is ${list[position-1].hour} next time is ${list[position].hour}")
-//
-//        bol = when(position){
-//            0-> true
-//            39-> false
-//            else-> list[position].hour<list[position-1].hour
-//        }
-//        println("on $position boolean equals $bol")
-//        return bol
-//    }
+    class ErrorViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
 
 
 }

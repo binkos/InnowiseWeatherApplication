@@ -7,8 +7,8 @@ import io.reactivex.Observable
 
 
 class MainModel:IModel {
-    override fun getWeather(lat:Double,lon:Double): Observable<WeatherClass> {
-        return WeatherRetrofitApi.provideWeather(lat, lon)
+    override fun getWeather(cityName:String): Observable<WeatherClass> {
+        return WeatherRetrofitApi.provideWeather(cityName)
     }
 
 }
