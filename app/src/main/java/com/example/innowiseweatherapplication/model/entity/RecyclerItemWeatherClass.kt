@@ -4,22 +4,29 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class RecyclerItemWeatherClass(
-    private val icon : String = "",
-    private val temp:Float = 0f,
+    val type : Int = 0,
+    val icon : String = "",
+    val temp:Float = 0f,
     val name: String="",
-    private val time:String="") :Parcelable {
+    val day:String = "",
+    val hour:Int=0
+) :Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString() as String,
         parcel.readFloat(),
         parcel.readString() as String,
-        parcel.toString()
+        parcel.readString() as String,
+        parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(type)
         parcel.writeString(icon)
         parcel.writeFloat(temp)
         parcel.writeString(name)
-        parcel.writeString(time)
+        parcel.writeString(day)
+        parcel.writeInt(hour)
     }
 
     override fun describeContents(): Int {
@@ -27,8 +34,13 @@ class RecyclerItemWeatherClass(
     }
 
     companion object CREATOR : Parcelable.Creator<RecyclerItemWeatherClass> {
+        const val HEADER_TYPE = 1
+        const val WEATHER_TYPE = 2
+        const val WEATHER_TYPE_WITHOUT_DIVIDERS = 3
         override fun createFromParcel(parcel: Parcel): RecyclerItemWeatherClass {
             return RecyclerItemWeatherClass(parcel)
+
+
         }
 
         override fun newArray(size: Int): Array<RecyclerItemWeatherClass?> {

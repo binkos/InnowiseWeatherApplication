@@ -21,12 +21,14 @@ class TodayWeatherPresenter(val view:ITodayWeatherView):ITodayWeatherPresenter {
         deg: Int
     ) {
 
-        view.fillViews(convertMetresToKiloMetres(speed),
+        view.fillViews(
+            convertMetresToKiloMetres(speed),
             convertDeg(deg))
     }
 
-    private fun convertMetresToKiloMetres(speed: Float)= (speed * (3600 / 1000)).roundToInt()
-
+    private fun convertMetresToKiloMetres(speed: Float):Int{
+        return((speed*3600)/1000).roundToInt()
+    }
     private fun convertDeg(deg: Int):String{
         return when (deg) {
             in 1..90 -> "NE"

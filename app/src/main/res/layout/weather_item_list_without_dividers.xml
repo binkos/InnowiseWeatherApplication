@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:layout_constraintHorizontal_weight="5"
     android:paddingTop="15dp"
-    >
+    android:paddingBottom="15dp">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-
-        >
+        tools:layout_editor_absoluteX="0dp">
 
         <ImageView
             android:id="@+id/weather_icon_ImageView"
@@ -55,34 +52,6 @@
             android:layout_weight="1"
             android:text="22"
             android:textSize="36sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/dividers_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:paddingTop="15dp">
-
-        <View
-            android:id="@+id/divider7"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="#FFFFFF" />
-
-        <View
-            android:id="@+id/divider6"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="4"
-            android:background="?android:attr/listDivider" />
     </LinearLayout>
 
 </LinearLayout>

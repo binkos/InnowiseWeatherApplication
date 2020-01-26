@@ -12,6 +12,9 @@ import com.example.innowiseweatherapplication.view.IMainView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainPresenter(private val view:IMainView):
     IMainPresenterInterface {
@@ -29,12 +32,29 @@ class MainPresenter(private val view:IMainView):
                 println("HERE")
                 weather = it
                 val arrayList = ArrayList<RecyclerItemWeatherClass>()
+                arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE,day="Today"))
                 it.list?.forEach {
-                    arrayList.add(RecyclerItemWeatherClass(it.weather[0].icon,it.main!!.temp-273,it.weather[0].main,it.dtTxt as String))
+
+                    val array = parseFunction(it.dtTxt!!)
+                    val parceledDay = anotherParcelFunction(array[1])
+
+                    if (array[0]==0&&arrayList.size!=1) arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE, day = parceledDay))
+                    if (array[0]==21){
+                    arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.WEATHER_TYPE_WITHOUT_DIVIDERS,it.weather[0].icon,
+                        it.main!!.temp-273,it.weather[0].main,parceledDay,array[0]))
+                    }
+                    else{
+                    arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.WEATHER_TYPE,it.weather[0].icon,
+                        it.main!!.temp-273,it.weather[0].main,parceledDay,array[0]))
+                    }
+
                 }
                 view.hideProgress()
-                view.openTodayWeather(weather,arrayList)},
+                view.openTodayWeather(weather,arrayList)
+            },
                 {t ->
+                    println(t.message)
+                    view.hideProgress()
                     view.showError()
                 }
         )
@@ -67,6 +87,28 @@ class MainPresenter(private val view:IMainView):
         return result
     }
 
+    private fun parseFunction(dateInString:String):IntArray{
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
+        formatter.timeZone = TimeZone.getDefault()
 
+        val date: Date = formatter.parse(dateInString) as Date
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        println(calendar.get(Calendar.HOUR_OF_DAY))
+        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        return intArrayOf(hourOfDay,dayOfWeek)
+    }
+
+    private fun anotherParcelFunction(date:Int):String = when(date){
+        1->"Sunday"
+        2->"Monday"
+        3->"Tuesday"
+        4->"Wednesday"
+        5->"Thursday"
+        6->"Friday"
+        7->"Saturday"
+        else -> "ERROR"
+    }
 
 }

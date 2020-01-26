@@ -9,21 +9,22 @@ import androidx.fragment.app.Fragment
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.presenter.presenterImpl.TodayWeatherPresenter
 import com.example.innowiseweatherapplication.view.ITodayWeatherView
-import kotlinx.android.synthetic.main.today_weather_fragment_view.*
+import kotlin.math.roundToInt
 
 class TodayFragment:Fragment(),ITodayWeatherView {
     lateinit var todayWeatherPresenter:TodayWeatherPresenter
-
+    lateinit var todayFragView:View
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.today_weather_fragment_view,container,false)
+        todayFragView = inflater.inflate(R.layout.today_weather_fragment_view,container,false)
         todayWeatherPresenter = TodayWeatherPresenter(this)
-        init(view)
-        return view
+        println(todayFragView.findViewById<TextView>(R.id.humidity_TextView)?.text )
+        init(todayFragView)
+        return todayFragView
     }
 
     override fun init(view: View) {
@@ -42,13 +43,16 @@ class TodayFragment:Fragment(),ITodayWeatherView {
         speed: Int,
         deg: String
     ) {
-        println("$speed hello from fillViews")
-        humidity_TextView.text = "${arguments!!.getInt("HUMIDITY")}%"
-        speed_TextView.text = speed.toString()
-        pressure_TextView.text = "${arguments!!.getInt("PRESSURE")}%"
-        temp_kf_TextView.text = "${arguments!!.getFloat("TEMP")}"
-        weather_TextView.text = "${arguments!!.getString("WEATHER_NAME")}"
-        city_TextView.text = "${arguments!!.getString("CITY_NAME")}"
+
+        todayFragView.findViewById<TextView>(R.id.humidity_TextView)?.text = "${arguments!!.getInt("HUMIDITY")}%"
+        todayFragView.findViewById<TextView>(R.id.speed_TextView)?.text = "$speed km/h"
+        todayFragView.findViewById<TextView>(R.id.pressure_TextView)?.text = "${arguments!!.getInt("PRESSURE")} hPa"
+        todayFragView.findViewById<TextView>(R.id.way_TextView)?.text = deg
+        todayFragView.findViewById<TextView>(R.id.temp_kf_TextView)?.text = "${arguments!!.getFloat("TEMP").roundToInt()}"
+        todayFragView.findViewById<TextView>(R.id.weather_TextView)?.text = "${arguments!!.getFloat("TEMP").roundToInt()}°C | ${arguments!!.getString("WEATHER_NAME")}"
+        todayFragView.findViewById<TextView>(R.id.city_TextView)?.text = "${arguments!!.getString("CITY_NAME")}, ${arguments!!.getString("COUNTRY_NAME")}"
+
+
     }
 
 

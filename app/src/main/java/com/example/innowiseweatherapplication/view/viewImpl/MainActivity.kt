@@ -62,30 +62,27 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showNotConnectionMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        println("connection Error is showed")
     }
 
     override fun getLastLocation() {
-        if (mainPresenter.isConnection(getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)){
-            if (checkPermission()){
-                if (isLocationEnabled()){
-                    mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
-
-                            val location: Location? = task.result
-                            if (location == null) {
-                              requestNewLocationData()
-                            } else {
-                                mainPresenter.getData(location.latitude,location.longitude)
-                            }
-                    }
-                }else{
-                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivity(intent)
+        if (checkPermission()){
+            if (isLocationEnabled()){
+                mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
+                        val location: Location? = task.result
+                        if (location == null) {
+                          requestNewLocationData()
+                        } else {
+                            mainPresenter.getData(location.latitude,location.longitude)
+                        }
                 }
             }else{
-            println("beforeCheckingPermission")
-            requestPermission()
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
             }
+        }else{
+        println("beforeCheckingPermission")
+        requestPermission()
         }
     }
 
@@ -99,6 +96,21 @@ class MainActivity : AppCompatActivity(), IMainView {
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_sun_white)
         tabLayout.getTabAt(1)?.setIcon(R.drawable.weather_partly_cloudy)
+
+        tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                println("${tab?.position} is selected")
+            }
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                println("${tab?.position} is reselected")
+
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                println("${tab?.position} is unselected")
+            }
+        })
+
+
     }
 
     override fun checkPermission():Boolean {
@@ -157,7 +169,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
               println("current latitude " + mLastLocation.latitude)
-            getLastLocation()
+           // getLastLocation()
         }
     }
 

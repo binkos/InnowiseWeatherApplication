@@ -10,7 +10,9 @@ import com.example.innowiseweatherapplication.view.viewImpl.ErrorFragment
 import com.example.innowiseweatherapplication.view.viewImpl.ForecastFragment
 import com.example.innowiseweatherapplication.view.viewImpl.TodayFragment
 
-class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClass: WeatherClass,val arrayList: ArrayList<RecyclerItemWeatherClass>): FragmentPagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClass: WeatherClass,
+                       private val arrayList: ArrayList<RecyclerItemWeatherClass>):
+    FragmentPagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         when(position){
@@ -21,7 +23,7 @@ class TabsPagerAdapter(fragmentManager: FragmentManager, private val weatherClas
                 bundle.putInt("HUMIDITY", weatherClass.list!![0].main!!.humidity)
                 bundle.putFloat("SPEED", weatherClass.list!![0].wind!!.speed)
                 bundle.putInt("DEG", weatherClass.list!![0].wind!!.deg)
-                bundle.putFloat("TEMP", weatherClass.list!![0].main!!.temp-273)
+                bundle.putFloat("TEMP", weatherClass.list!![0].main!!.tempKf)
                 bundle.putString("WEATHER_NAME", weatherClass.list!![0].weather[0].main)
                 bundle.putString("COUNTRY_NAME", weatherClass.city!!.country)
                 bundle.putInt("PRESSURE", weatherClass.list!![0].main!!.pressure)
