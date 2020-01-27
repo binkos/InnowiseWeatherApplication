@@ -1,9 +1,6 @@
 package com.example.innowiseweatherapplication.presenter.presenterImpl
 
 import android.annotation.SuppressLint
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
@@ -18,16 +15,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainPresenter(private val view:IMainView,private val someTypesHelper: SomeTypesHelper):
+class MainPresenter(private var view:IMainView?,private val someTypesHelper: SomeTypesHelper):
     IMainPresenterInterface {
     private val model = MainModel()
     lateinit var weather:WeatherClass
 
     @SuppressLint("CheckResult")
     override fun getData(cityName:String) {
-        view.showProgress()
+//        view.showProgress()
         val dataObservable: Observable<WeatherClass> = model.getWeather(cityName)
-
         dataObservable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( {it ->
@@ -35,7 +31,6 @@ class MainPresenter(private val view:IMainView,private val someTypesHelper: Some
                 val arrayList = ArrayList<RecyclerItemWeatherClass>()
                 arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE,day="Today"))
                 it.list?.forEach {
-
                     val array = parseFunction(it.dtTxt!!)
                     val parceledDay = anotherParcelFunction(array[1])
                     if (array[0]==0&&arrayList.size!=1) arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE, day = parceledDay))
@@ -47,7 +42,6 @@ class MainPresenter(private val view:IMainView,private val someTypesHelper: Some
                     arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.WEATHER_TYPE,it.weather[0].icon,
                         it.main!!.temp-273,it.weather[0].main,parceledDay,array[0]))
                     }
-
                 }
 
                 val todayWeatherClass = TodayWeatherClass(
@@ -61,48 +55,20 @@ class MainPresenter(private val view:IMainView,private val someTypesHelper: Some
                     it.list!![0].main!!.pressure,
                     it.city!!.name
                 )
-                view.hideProgress()
-                view.openTodayWeather(todayWeatherClass,arrayList)
+                view!!.hideProgress()
+                view!!.openTodayWeather(todayWeatherClass,arrayList)
             },
                 {t ->
                     println(t.message)
-                    view.hideProgress()
-                    view.showError()
+                    view!!.hideProgress()
+                    view!!.showError()
                 }
         )
-    }
-
-    fun isConnection(cm: ConnectivityManager): Boolean {
-        var result = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            cm.run {
-                cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                    if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        result = true
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        result = true
-                    }
-                }
-            }
-        } else {
-            cm.run {
-                cm.activeNetworkInfo?.run {
-                    if (type == ConnectivityManager.TYPE_WIFI) {
-                        result = true
-                    } else if (type == ConnectivityManager.TYPE_MOBILE) {
-                        result = true
-                    }
-                }
-            }
-        }
-        println("$result from isConnectionInternet")
-        return result
     }
 
     private fun parseFunction(dateInString:String):IntArray{
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
         formatter.timeZone = TimeZone.getDefault()
-
         val date: Date = formatter.parse(dateInString) as Date
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -121,5 +87,40 @@ class MainPresenter(private val view:IMainView,private val someTypesHelper: Some
         7->"Saturday"
         else -> "ERROR"
     }
+
+    @SuppressLint("CheckResult")
+    fun getLastLocation() {
+        view!!.showProgress()
+        if (someTypesHelper.isConnection()){
+            if (someTypesHelper.checkPermission()){
+                if (someTypesHelper.isLocationEnabled()){
+                    someTypesHelper.mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
+                        val isLocation:Boolean = someTypesHelper.isLocationNull(task.result)
+                        if (isLocation) {
+                            someTypesHelper.requestNewLocationData()
+                            getLastLocation()
+                        } else {
+                            getData(someTypesHelper.getCityWhereYouAre())
+                        }
+                    }
+                }else{
+                    someTypesHelper.createNewIntent()
+                }
+            }else{
+                println("beforeCheckingPermission")
+                view!!.hideProgress()
+                view!!.requestPermission()
+            }
+        }
+        else{
+            println("Trouble with Internet Connection")
+        }
+    }
+
+    fun detachView(){
+        view = null
+    }
+
+
 
 }

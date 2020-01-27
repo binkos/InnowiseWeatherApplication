@@ -2,17 +2,9 @@ package com.example.innowiseweatherapplication.view.viewImpl
 
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.Looper
-import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -24,16 +16,16 @@ import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.adapter.TabsPagerAdapter
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
-import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.example.innowiseweatherapplication.model.modelImpl.SomeTypesHelper
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
 import com.example.innowiseweatherapplication.view.IMainView
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
 class MainActivity : AppCompatActivity(), IMainView {
-    private val PERMISSION_ID = 42
+    private val ID = 42
     private lateinit var mFusedLocationClient:FusedLocationProviderClient
     private lateinit var mainPresenter:MainPresenter
     private lateinit var viewPager: ViewPager
@@ -42,13 +34,18 @@ class MainActivity : AppCompatActivity(), IMainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        init()
+
+        mainPresenter.getLastLocation()
+    }
+
+    private fun init(){
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val someTypesHelper = SomeTypesHelper(this)
         mainPresenter = MainPresenter(this,someTypesHelper)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        getLastLocation()
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
-
     }
 
     override fun showError() {
@@ -69,37 +66,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         println("Progress is hided")
     }
 
-    override fun showLoadedWeather(provideWeather: WeatherClass?) {
-
-        println(provideWeather?.list?.get(0)?.main?.temp)
-    }
-
     override fun showNotConnectionMessage() {
         println("connection Error is showed")
-    }
-
-    override fun getLastLocation() {
-            if (checkPermission()){
-                if (isLocationEnabled()){
-                    mFusedLocationClient.lastLocation.addOnCompleteListener {task ->
-                            val location: Location? = task.result
-                            if (location == null) {
-                              requestNewLocationData()
-
-                            } else {
-                                val geocode = Geocoder(this, Locale.ENGLISH)
-                                val addresses:List<Address> = geocode.getFromLocation(location.latitude,location.longitude,1)
-                                if (addresses.isNotEmpty()) mainPresenter.getData(addresses[0].locality)
-                            }
-                    }
-                }else{
-                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivity(intent)
-                }
-            }else{
-            println("beforeCheckingPermission")
-            requestPermission()
-            }
     }
 
     override fun openTodayWeather(todayWeatherClass: TodayWeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>) {
@@ -131,17 +99,6 @@ class MainActivity : AppCompatActivity(), IMainView {
             }
         })
 
-
-    }
-
-    override fun checkPermission():Boolean {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            println("true")
-            return true
-        }
-        println("false")
-        return false
     }
 
     override fun requestPermission() {
@@ -149,14 +106,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
-    }
-
-    override fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
+            ID
         )
     }
 
@@ -164,43 +114,19 @@ class MainActivity : AppCompatActivity(), IMainView {
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSION_ID) {
+    ){
+        if (requestCode == ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                  getLastLocation()
+                  mainPresenter.getLastLocation()
+            }
+            else{
+                println("Conductor! We have a trouble!!!")
             }
         }
     }
 
-    private fun requestNewLocationData() {
-        val mLocationRequest = LocationRequest()
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 0
-        mLocationRequest.fastestInterval = 0
-        mLocationRequest.numUpdates = 1
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mFusedLocationClient.requestLocationUpdates(
-            mLocationRequest, mLocationCallback,
-            Looper.myLooper()
-        )
-    }
-
-    private val mLocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            val mLastLocation: Location = locationResult.lastLocation
-              println("current latitude " + mLastLocation.latitude)
-           // getLastLocation()
-        }
-    }
-
-    fun isInternetConnection()= run {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        activeNetwork?.isConnectedOrConnecting == true
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        mainPresenter.detachView()
     }
 }

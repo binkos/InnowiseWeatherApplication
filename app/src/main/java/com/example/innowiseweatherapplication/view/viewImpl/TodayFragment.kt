@@ -1,5 +1,6 @@
 package com.example.innowiseweatherapplication.view.viewImpl
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,7 @@ class TodayFragment:Fragment(),ITodayWeatherView {
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun fillViews(
         speed: Int,
         deg: String
@@ -54,8 +56,6 @@ class TodayFragment:Fragment(),ITodayWeatherView {
         todayFragView.findViewById<TextView>(R.id.temp_kf_TextView)?.text = "${arguments!!.getFloat("TEMP").roundToInt()}"
         todayFragView.findViewById<TextView>(R.id.weather_TextView)?.text = "${arguments!!.getFloat("TEMP").roundToInt()}°C | ${arguments!!.getString("WEATHER_NAME")}"
         todayFragView.findViewById<TextView>(R.id.city_TextView)?.text = "${arguments!!.getString("CITY_NAME")}, ${arguments!!.getString("COUNTRY_NAME")}"
-
-
     }
 
 
