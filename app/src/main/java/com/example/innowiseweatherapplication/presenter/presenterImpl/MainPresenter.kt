@@ -49,6 +49,7 @@ class MainPresenter(private var view:IMainView?,private val someTypesHelper: Som
                     it.list!![0].wind!!.speed,
                     it.list!![0].wind!!.deg,
                     it.list!![0].main!!.tempKf,
+                    it.list!![0].main!!.seaLevel,
                     it.list!![0].weather[0].main,
                     it.list!![0].weather[0].icon,
                     it.city!!.country,
@@ -107,12 +108,13 @@ class MainPresenter(private var view:IMainView?,private val someTypesHelper: Som
                     someTypesHelper.createNewIntent()
                 }
             }else{
-                println("beforeCheckingPermission")
                 view!!.hideProgress()
                 view!!.requestPermission()
             }
         }
         else{
+            view!!.hideProgress()
+            view!!.showNotConnectionMessage()
             println("Trouble with Internet Connection")
         }
     }

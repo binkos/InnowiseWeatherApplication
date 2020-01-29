@@ -8,6 +8,7 @@ class TodayWeatherClass(
         val speed : Float = 0f,
         val deg:Int = 0,
         val temp: Float=0f,
+        val seaLevel: Int =0,
         val weatherName:String = "",
         val icon:String = "",
         val countryName:String="",
@@ -19,6 +20,7 @@ class TodayWeatherClass(
             parcel.readFloat(),
             parcel.readInt(),
             parcel.readFloat(),
+            parcel.readInt(),
             parcel.readString() as String,
             parcel.readString() as String,
             parcel.readString() as String,
@@ -31,6 +33,7 @@ class TodayWeatherClass(
             parcel.writeFloat(speed)
             parcel.writeInt(deg)
             parcel.writeFloat(temp)
+            parcel.writeInt(seaLevel)
             parcel.writeString(weatherName)
             parcel.writeString(icon)
             parcel.writeString(countryName)

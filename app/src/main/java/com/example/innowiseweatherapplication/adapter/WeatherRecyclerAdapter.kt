@@ -37,20 +37,21 @@ class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<Rec
             RecyclerItemWeatherClass.WEATHER_TYPE->{
 
                val icon =when(item.icon){
-                   "04d"->{R.drawable.ic_04d}
-                   "04n"->{R.drawable.ic_04n}
-                   "01d"->{R.drawable.ic_01d}
-                   "01n"->{R.drawable.ic_01n}
-                   "10d"->{R.drawable.ic_10d}
-                   "10n"->{R.drawable.ic_10n}
-                   "13d"->{R.drawable.ic_13d}
-                   "13n"->{R.drawable.ic_13n}
-                   "03d"->{R.drawable.ic_03d}
-                   "03n"->{R.drawable.ic_03n}
+                   "04d"->{R.drawable.ic_04_g}
+                   "04n"->{R.drawable.ic_04_g}
+                   "01d"->{R.drawable.ic_01d_g}
+                   "01n"->{R.drawable.ic_01n_g}
+                   "02d"->{R.drawable.ic_01d_g}
+                   "02n"->{R.drawable.ic_01n_g}
+                   "10d"->{R.drawable.ic_10_g}
+                   "10n"->{R.drawable.ic_10_g}
+                   "13d"->{R.drawable.ic_13_g}
+                   "13n"->{R.drawable.ic_13_g}
+                   "03d"->{R.drawable.ic_03d_g}
+                   "03n"->{R.drawable.ic_03n_g}
 
                     else->{2}
                 }
-
                 (holder as WeatherViewHolder).bind(icon,item.temp,item.name,item.hour)
 
 
@@ -58,16 +59,18 @@ class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<Rec
             }
             RecyclerItemWeatherClass.WEATHER_TYPE_WITHOUT_DIVIDERS->{
                 val icon =when(item.icon){
-                    "04d"->{R.drawable.ic_04d}
-                    "04n"->{R.drawable.ic_04n}
-                    "01d"->{R.drawable.ic_01d}
-                    "01n"->{R.drawable.ic_01n}
-                    "10d"->{R.drawable.ic_10d}
-                    "10n"->{R.drawable.ic_10n}
-                    "13d"->{R.drawable.ic_13d}
-                    "13n"->{R.drawable.ic_13n}
-                    "03d"->{R.drawable.ic_03d}
-                    "03n"->{R.drawable.ic_03n}
+                    "04d"->{R.drawable.ic_04_g}
+                    "04n"->{R.drawable.ic_04_g}
+                    "01d"->{R.drawable.ic_01d_g}
+                    "01n"->{R.drawable.ic_01n_g}
+                    "02d"->{R.drawable.ic_01d_g}
+                    "02n"->{R.drawable.ic_01n_g}
+                    "10d"->{R.drawable.ic_10_g}
+                    "10n"->{R.drawable.ic_10_g}
+                    "13d"->{R.drawable.ic_13_g}
+                    "13n"->{R.drawable.ic_13_g}
+                    "03d"->{R.drawable.ic_03d_g}
+                    "03n"->{R.drawable.ic_03n_g}
 
                     else->{2}
                 }
@@ -101,7 +104,7 @@ class WeatherRecyclerAdapter(val context:Context, private val list:ArrayList<Rec
         @SuppressLint("SetTextI18n")
         fun bind(icon:Int, temp:Float, name:String, hour:Int){
 
-            Picasso.get().load(icon).error(R.drawable.sun).into(weathIcon)
+            Picasso.get().load(icon).error(R.drawable.ic_01d).into(weathIcon)
             var hourTime = "${hour}.00"
             if (hourTime.length==4) hourTime = "0$hourTime"
             timeTv.text = hourTime

@@ -30,7 +30,7 @@ class SomeTypesHelper(private val context:Context) {
         mLocationRequest.interval = 0
         mLocationRequest.fastestInterval = 0
         mLocationRequest.numUpdates = 1
-
+    println("HERE")
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
@@ -42,6 +42,7 @@ class SomeTypesHelper(private val context:Context) {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
             println("Current latitude " + mLastLocation.latitude)
+            println("Current longitude " + mLastLocation.longitude)
         }
     }
 
@@ -91,17 +92,19 @@ class SomeTypesHelper(private val context:Context) {
     }
 
     fun getCityWhereYouAre():String {
+        println("We are here")
         val geocode = Geocoder(context, Locale.ENGLISH)
         val addresses:List<Address> = geocode.getFromLocation(mLocation!!.latitude,mLocation!!.longitude,1)
-        val city =  if (addresses.isNotEmpty()) addresses[0].locality
-        else "еrror"
-        return city
+        return if (addresses.isNotEmpty()) addresses[0].locality
+        else "Error"
     }
 
 
     fun isLocationNull(location:Location?) = if (location==null){
+        println("Location NUll")
         true
     }else{
+        println("Location not null")
         mLocation=location
         false
     }

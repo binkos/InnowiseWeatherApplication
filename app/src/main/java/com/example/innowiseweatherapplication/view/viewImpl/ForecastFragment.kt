@@ -1,5 +1,6 @@
 package com.example.innowiseweatherapplication.view.viewImpl
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherCl
 
 class ForecastFragment:Fragment() {
 
+    @SuppressLint("CheckResult")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,8 +26,22 @@ class ForecastFragment:Fragment() {
             recyclerView.adapter = WeatherRecyclerAdapter(this.requireContext(),
                 arguments?.getParcelableArrayList<RecyclerItemWeatherClass>("ARRAY") as ArrayList<RecyclerItemWeatherClass>
             )
-
         recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        val layMan = recyclerView.layoutManager as LinearLayoutManager
+
+        recyclerView.addOnScrollListener(object:RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                println(layMan.findFirstVisibleItemPosition())
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+//                println(newState)
+            }
+        })
+
 
         return view
     }

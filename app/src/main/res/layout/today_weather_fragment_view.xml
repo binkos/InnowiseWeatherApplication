@@ -66,6 +66,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="22C | Sunny"
+        android:textColor="@color/colorSelected"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,12 +79,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SE"
-        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintBottom_toBottomOf="@+id/speed_TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toEndOf="@+id/humidity_TextView"
-        app:layout_constraintTop_toBottomOf="@+id/pressure_TextView"
-        app:layout_constraintVertical_bias="0.503" />
+        app:layout_constraintTop_toTopOf="@+id/speed_TextView" />
 
     <TextView
         android:id="@+id/humidity_TextView"
@@ -90,14 +91,15 @@
         android:layout_height="wrap_content"
         android:text="57%"
         app:layout_constraintBottom_toBottomOf="@+id/share_TextView"
-        app:layout_constraintEnd_toStartOf="@+id/temp_kf_TextView"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toStartOf="@+id/sea_lvl"
+        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
-        app:layout_constraintVertical_bias="0.237" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <TextView
-        android:id="@+id/temp_kf_TextView"
+        android:id="@+id/sea_lvl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.00"
@@ -111,12 +113,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1019"
-        app:layout_constraintBottom_toTopOf="@+id/speed_TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/sea_lvl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toEndOf="@+id/temp_kf_TextView"
-        app:layout_constraintTop_toBottomOf="@+id/divider2"
-        app:layout_constraintVertical_bias="0.503" />
+        app:layout_constraintStart_toEndOf="@+id/sea_lvl"
+        app:layout_constraintTop_toTopOf="@+id/sea_lvl" />
 
     <TextView
         android:id="@+id/speed_TextView"
@@ -164,6 +165,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textTodayView"
         app:layout_constraintVertical_bias="0.442" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/share_TextView"
+        app:layout_constraintEnd_toEndOf="@+id/way_TextView"
+        app:layout_constraintStart_toStartOf="@+id/way_TextView"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.475"
+        app:srcCompat="@drawable/ic_compass_g" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/humidity_TextView"
+        app:layout_constraintEnd_toEndOf="@+id/humidity_TextView"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="@+id/humidity_TextView"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.8"
+        app:srcCompat="@drawable/ic_water_g" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/speed_TextView"
+        app:layout_constraintStart_toStartOf="@+id/speed_TextView"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:srcCompat="@drawable/ic_windr_g" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/pressure_TextView"
+        app:layout_constraintStart_toStartOf="@+id/pressure_TextView"
+        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:srcCompat="@drawable/ic_pressure_g" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintEnd_toEndOf="@+id/sea_lvl"
+        app:layout_constraintStart_toStartOf="@+id/sea_lvl"
+        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:srcCompat="@drawable/ic_sea_lvl" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

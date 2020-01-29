@@ -24,7 +24,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/sun"
             android:contentDescription="@string/desciption" />
 
         <LinearLayout
@@ -41,7 +40,7 @@
                 android:id="@+id/time_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/weather_info_TextView"
@@ -55,7 +54,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:textColor="@color/colorSelected"
+            />
 
     </LinearLayout>
 

@@ -25,6 +25,7 @@ class TabsPagerAdapter(fragmentManager: FragmentManager, private val todayWeathe
                 bundle.putFloat("SPEED", todayWeatherClass.speed)
                 bundle.putInt("DEG", todayWeatherClass.deg)
                 bundle.putFloat("TEMP", todayWeatherClass.temp)
+                bundle.putInt("SEA",todayWeatherClass.seaLevel)
                 bundle.putString("WEATHER_NAME", todayWeatherClass.weatherName)
                 bundle.putInt("ICON",getResIdIcon(todayWeatherClass.icon))
                 bundle.putString("COUNTRY_NAME", todayWeatherClass.countryName)
@@ -59,26 +60,18 @@ class TabsPagerAdapter(fragmentManager: FragmentManager, private val todayWeathe
     }
 
     private fun getResIdIcon(name:String)=when(name){
-        "04d"->{
-            R.drawable.ic_04d}
-        "04n"->{
-            R.drawable.ic_04n}
-        "01d"->{
-            R.drawable.ic_01d}
-        "01n"->{
-            R.drawable.ic_01n}
-        "10d"->{
-            R.drawable.ic_10d}
-        "10n"->{
-            R.drawable.ic_10n}
-        "13d"->{
-            R.drawable.ic_13d}
-        "13n"->{
-            R.drawable.ic_13n}
-        "03d"->{
-            R.drawable.ic_03d}
-        "03n"->{
-            R.drawable.ic_03n}
+        "04d"->{R.drawable.ic_04_g}
+        "04n"->{R.drawable.ic_04_g}
+        "01d"->{R.drawable.ic_01d_g}
+        "01n"->{R.drawable.ic_01n_g}
+        "02d"->{R.drawable.ic_01d_g}
+        "02n"->{R.drawable.ic_01n_g}
+        "10d"->{R.drawable.ic_10_g}
+        "10n"->{R.drawable.ic_10_g}
+        "13d"->{R.drawable.ic_13_g}
+        "13n"->{R.drawable.ic_13_g}
+        "03d"->{R.drawable.ic_03d_g}
+        "03n"->{R.drawable.ic_03n_g}
 
         else->{2}
     }

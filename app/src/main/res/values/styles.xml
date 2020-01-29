@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -13,7 +13,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
 </resources>

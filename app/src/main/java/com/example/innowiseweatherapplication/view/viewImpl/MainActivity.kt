@@ -7,8 +7,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
@@ -21,6 +21,7 @@ import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresen
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
@@ -30,12 +31,15 @@ class MainActivity : AppCompatActivity(), IMainView {
     private lateinit var mainPresenter:MainPresenter
     private lateinit var viewPager: ViewPager
     lateinit var tabLayout: TabLayout
+    private lateinit var errorSnackbar:Snackbar
+    private lateinit var internetSnackbar:Snackbar
+    private lateinit var permissionErrorSnackbar:Snackbar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init()
-
         mainPresenter.getLastLocation()
     }
 
@@ -46,28 +50,56 @@ class MainActivity : AppCompatActivity(), IMainView {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
+
+        errorSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),"You have some info",Snackbar.LENGTH_INDEFINITE)
+        internetSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),"You don't have Internet Connection",Snackbar.LENGTH_INDEFINITE)
+        permissionErrorSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),"You didn't give geoPermission for us",Snackbar.LENGTH_INDEFINITE)
+
+
+
+        findViewById<Button>(R.id.retryBtn).setOnClickListener {
+            errorSnackbar.dismiss()
+            internetSnackbar.dismiss()
+            permissionErrorSnackbar.dismiss()
+            mainPresenter.getLastLocation()
+        }
     }
 
     override fun showError() {
-       findViewById<TextView>(R.id.errorMessage).visibility=View.VISIBLE
-       findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
+        findViewById<ImageView>(R.id.memIMG).visibility=View.VISIBLE
+        findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
+       errorSnackbar.show()
        println("Error is handled")
     }
 
+    fun showPermissionError() {
+        findViewById<ImageView>(R.id.memIMG).visibility=View.VISIBLE
+        findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
+        permissionErrorSnackbar.show()
+        println("Error is handled")
+    }
+
     override fun showProgress() {
-        findViewById<TextView>(R.id.errorMessage).visibility=View.INVISIBLE
         findViewById<Button>(R.id.retryBtn).visibility=View.INVISIBLE
+        findViewById<ImageView>(R.id.memIMG).visibility=View.INVISIBLE
         findViewById<ProgressBar>(R.id.progressBar).visibility=View.VISIBLE
+
         println("Progress is showed")
     }
 
     override fun hideProgress() {
+
         findViewById<ProgressBar>(R.id.progressBar).visibility=View.GONE
+
         println("Progress is hided")
     }
 
     override fun showNotConnectionMessage() {
+        internetSnackbar.show()
+        findViewById<ImageView>(R.id.memIMG).visibility=View.VISIBLE
+        findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
         println("connection Error is showed")
+
     }
 
     override fun openTodayWeather(todayWeatherClass: TodayWeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>) {
@@ -82,15 +114,17 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
-        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_01d_w)
-        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_03d_w)
+        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_01d_b)
+        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_03d)
 
         tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-//                println("${tab?.position} is selected")
+                if (tab==tabLayout.getTabAt(0)) tab!!.setIcon(R.drawable.ic_01d_b)
+                else tab!!.setIcon(R.drawable.ic_03d_b)
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-//                println("${tab?.position} is unselected")
+                if (tab==tabLayout.getTabAt(0)){tab!!.setIcon(R.drawable.ic_01d)}
+                else tab!!.setIcon(R.drawable.ic_03d)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -120,6 +154,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                   mainPresenter.getLastLocation()
             }
             else{
+                showPermissionError()
                 println("Conductor! We have a trouble!!!")
             }
         }
