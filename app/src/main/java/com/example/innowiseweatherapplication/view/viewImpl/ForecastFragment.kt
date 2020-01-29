@@ -45,6 +45,8 @@ class ForecastFragment:Fragment() {
         var prevItemPos:Int=-1
         val dayTextView = view.findViewById<TextView>(R.id.day_TextView3)
 
+//        if ((list.size-40)==4)
+
         recyclerView.addOnScrollListener(object:RecyclerView.OnScrollListener(){
             @SuppressLint("SetTextI18n")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -62,6 +64,8 @@ class ForecastFragment:Fragment() {
                         (listID[3]-1)->{dayTextView.text = list[listID[2]].day}
                         (listID[3]+1)->{dayTextView.text = list[listID[3]].day}
                         (listID[4]-1)->{dayTextView.text = list[listID[3]].day}
+                        (listID[4]+1)->{dayTextView.text = list[listID[4]].day}
+
                     }
                 }
                 prevItemPos = firstItemPosition

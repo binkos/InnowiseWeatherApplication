@@ -131,7 +131,7 @@ class SomeTypesHelper(private val context:Context) {
         return intArrayOf(hourOfDay,dayOfWeek)
     }
 
-    fun anotherParcelFunction(date:Int):String = when(date){
+     fun anotherParcelFunction(date:Int):String = when(date){
         1->"Sunday"
         2->"Monday"
         3->"Tuesday"

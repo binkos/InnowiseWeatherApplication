@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun init(){
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        val someTypesHelper = SomeTypesHelper(this)
+        val someTypesHelper = SomeTypesHelper(applicationContext)
         mainPresenter = MainPresenter(this,someTypesHelper)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         viewPager = findViewById(R.id.view_pager)
