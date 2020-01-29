@@ -93,7 +93,7 @@ data class WeatherClass (
             var humidity: Int = 0,
             @SerializedName("temp_kf")
             @Expose
-            var tempKf: Float = 0f):Parcelable {
+            var tempKf: Float = 0f): Parcelable {
 
             constructor(parcel: Parcel):this(
                 parcel.readFloat(),
@@ -167,6 +167,6 @@ data class WeatherClass (
                 @SerializedName("country")
                 @Expose
                 var country: String = ""
-                )
+    )
 
 }

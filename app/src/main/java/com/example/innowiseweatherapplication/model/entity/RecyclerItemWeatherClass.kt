@@ -4,20 +4,20 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class RecyclerItemWeatherClass(
-    val type : Int = 0,
-    val icon : String = "",
-    val temp:Float = 0f,
-    val name: String="",
-    val day:String = "",
-    val hour:Int=0
+        val type : Int = 0,
+        val icon : String = "",
+        val temp:Float = 0f,
+        val name: String="",
+        val day:String = "",
+        val hour:Int=0
 ) :Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString() as String,
-        parcel.readFloat(),
-        parcel.readString() as String,
-        parcel.readString() as String,
-        parcel.readInt()
+            parcel.readInt(),
+            parcel.readString() as String,
+            parcel.readFloat(),
+            parcel.readString() as String,
+            parcel.readString() as String,
+            parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

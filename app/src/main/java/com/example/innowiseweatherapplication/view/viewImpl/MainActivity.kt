@@ -32,8 +32,6 @@ class MainActivity : AppCompatActivity(), IMainView {
     private lateinit var viewPager: ViewPager
     lateinit var tabLayout: TabLayout
     private lateinit var errorSnackbar:Snackbar
-    private lateinit var internetSnackbar:Snackbar
-    private lateinit var permissionErrorSnackbar:Snackbar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         mainPresenter.getLastLocation()
     }
 
-    private fun init(){
+    override fun init(){
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val someTypesHelper = SomeTypesHelper(this)
         mainPresenter = MainPresenter(this,someTypesHelper)
@@ -51,32 +49,19 @@ class MainActivity : AppCompatActivity(), IMainView {
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
 
-        errorSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),"You have some info",Snackbar.LENGTH_INDEFINITE)
-        internetSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),"You don't have Internet Connection",Snackbar.LENGTH_INDEFINITE)
-        permissionErrorSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),"You didn't give geoPermission for us",Snackbar.LENGTH_INDEFINITE)
-
-
-
         findViewById<Button>(R.id.retryBtn).setOnClickListener {
             errorSnackbar.dismiss()
-            internetSnackbar.dismiss()
-            permissionErrorSnackbar.dismiss()
+
             mainPresenter.getLastLocation()
         }
     }
 
-    override fun showError() {
+    override fun showError(errorType:String) {
         findViewById<ImageView>(R.id.memIMG).visibility=View.VISIBLE
         findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
-       errorSnackbar.show()
+        errorSnackbar = Snackbar.make(findViewById<View>(R.id.main_activity),errorType,Snackbar.LENGTH_INDEFINITE)
+        errorSnackbar.show()
        println("Error is handled")
-    }
-
-    fun showPermissionError() {
-        findViewById<ImageView>(R.id.memIMG).visibility=View.VISIBLE
-        findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
-        permissionErrorSnackbar.show()
-        println("Error is handled")
     }
 
     override fun showProgress() {
@@ -92,14 +77,6 @@ class MainActivity : AppCompatActivity(), IMainView {
         findViewById<ProgressBar>(R.id.progressBar).visibility=View.GONE
 
         println("Progress is hided")
-    }
-
-    override fun showNotConnectionMessage() {
-        internetSnackbar.show()
-        findViewById<ImageView>(R.id.memIMG).visibility=View.VISIBLE
-        findViewById<Button>(R.id.retryBtn).visibility=View.VISIBLE
-        println("connection Error is showed")
-
     }
 
     override fun openTodayWeather(todayWeatherClass: TodayWeatherClass,arrayList: ArrayList<RecyclerItemWeatherClass>) {
@@ -154,7 +131,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                   mainPresenter.getLastLocation()
             }
             else{
-                showPermissionError()
+                showError("You didn't give geoPermission for us")
                 println("Conductor! We have a trouble!!!")
             }
         }

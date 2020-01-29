@@ -1,5 +1,6 @@
 package com.example.innowiseweatherapplication.api
 
+
 import com.example.innowiseweatherapplication.model.entity.WeatherClass
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable

@@ -4,4 +4,5 @@
     <string name="retry">Retry</string>
     <string name="desciption">Desciption</string>
     <string name="mem">Mem</string>
+    <string name="today">Today</string>
 </resources>

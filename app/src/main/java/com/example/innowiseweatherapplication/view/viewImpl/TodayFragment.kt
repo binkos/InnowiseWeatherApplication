@@ -34,7 +34,7 @@ class TodayFragment:Fragment(),ITodayWeatherView {
         view.findViewById<TextView>(R.id.share_TextView).setOnClickListener {
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, " ")
+                    putExtra(Intent.EXTRA_TEXT, "Hello, right now i am in ${arguments!!.getString("CITY_NAME")} and temperature here is ${arguments!!.getFloat("TEMP").roundToInt()}°C, we have ${arguments!!.getString("WEATHER_NAME")}")
                     type = "text/plain"
                 }
                 startActivity(Intent.createChooser(sendIntent, null))

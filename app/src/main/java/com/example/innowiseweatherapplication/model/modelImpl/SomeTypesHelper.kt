@@ -16,6 +16,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.location.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -94,6 +95,9 @@ class SomeTypesHelper(private val context:Context) {
     fun getCityWhereYouAre():String {
         println("We are here")
         val geocode = Geocoder(context, Locale.ENGLISH)
+        if (mLocation!!.longitude<0||mLocation!!.latitude<0){
+            return "Error"
+        }
         val addresses:List<Address> = geocode.getFromLocation(mLocation!!.latitude,mLocation!!.longitude,1)
         return if (addresses.isNotEmpty()) addresses[0].locality
         else "Error"
@@ -112,6 +116,30 @@ class SomeTypesHelper(private val context:Context) {
     fun createNewIntent(){
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(context,intent,null)
+    }
+
+
+
+    fun parseFunction(dateInString:String):IntArray{
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
+        formatter.timeZone = TimeZone.getDefault()
+        val date: Date = formatter.parse(dateInString) as Date
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        return intArrayOf(hourOfDay,dayOfWeek)
+    }
+
+    fun anotherParcelFunction(date:Int):String = when(date){
+        1->"Sunday"
+        2->"Monday"
+        3->"Tuesday"
+        4->"Wednesday"
+        5->"Thursday"
+        6->"Friday"
+        7->"Saturday"
+        else -> "ERROR"
     }
 
 }
