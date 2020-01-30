@@ -39,38 +39,61 @@ class ForecastFragment:Fragment() {
             )
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
-
         val layMan = recyclerView.layoutManager as LinearLayoutManager
         var firstItemPosition:Int
         var prevItemPos:Int=-1
         val dayTextView = view.findViewById<TextView>(R.id.day_TextView3)
 
-//        if ((list.size-40)==4)
 
-        recyclerView.addOnScrollListener(object:RecyclerView.OnScrollListener(){
-            @SuppressLint("SetTextI18n")
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                firstItemPosition = layMan.findFirstVisibleItemPosition()
-                if (prevItemPos!=firstItemPosition){
-                    when(firstItemPosition){
-                        0->{dayTextView.text = "Today"}
-                        (listID[0]-1)->{dayTextView.text = "Today"}
-                        (listID[0]+1)->{dayTextView.text = list[listID[0]].day}
-                        (listID[1]-1)->{dayTextView.text = list[listID[0]].day}
-                        (listID[1]+1)->{dayTextView.text = list[listID[1]].day}
-                        (listID[2]-1)->{dayTextView.text = list[listID[1]].day}
-                        (listID[2]+1)->{dayTextView.text = list[listID[2]].day}
-                        (listID[3]-1)->{dayTextView.text = list[listID[2]].day}
-                        (listID[3]+1)->{dayTextView.text = list[listID[3]].day}
-                        (listID[4]-1)->{dayTextView.text = list[listID[3]].day}
-                        (listID[4]+1)->{dayTextView.text = list[listID[4]].day}
-
+        if ((list.size-40)==4){
+            recyclerView.addOnScrollListener(object:RecyclerView.OnScrollListener(){
+                @SuppressLint("SetTextI18n")
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    firstItemPosition = layMan.findFirstVisibleItemPosition()
+                    if (prevItemPos!=firstItemPosition){
+                        when(firstItemPosition){
+                            0->{dayTextView.text = "Today"}
+                            (listID[0]-1)->{dayTextView.text = "Today"}
+                            (listID[0]+1)->{dayTextView.text = list[listID[0]].day}
+                            (listID[1]-1)->{dayTextView.text = list[listID[0]].day}
+                            (listID[1]+1)->{dayTextView.text = list[listID[1]].day}
+                            (listID[2]-1)->{dayTextView.text = list[listID[1]].day}
+                            (listID[2]+1)->{dayTextView.text = list[listID[2]].day}
+                            (listID[3]-1)->{dayTextView.text = list[listID[2]].day}
+                            (listID[3]+1)->{dayTextView.text = list[listID[3]].day}
+                        }
                     }
+                    prevItemPos = firstItemPosition
                 }
-                prevItemPos = firstItemPosition
-            }
-        })
+            })
+        }
+        else{
+            recyclerView.addOnScrollListener(object:RecyclerView.OnScrollListener(){
+                @SuppressLint("SetTextI18n")
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    firstItemPosition = layMan.findFirstVisibleItemPosition()
+                    if (prevItemPos!=firstItemPosition){
+                        when(firstItemPosition){
+                            0->{dayTextView.text = "Today"}
+                            (listID[0]-1)->{dayTextView.text = "Today"}
+                            (listID[0]+1)->{dayTextView.text = list[listID[0]].day}
+                            (listID[1]-1)->{dayTextView.text = list[listID[0]].day}
+                            (listID[1]+1)->{dayTextView.text = list[listID[1]].day}
+                            (listID[2]-1)->{dayTextView.text = list[listID[1]].day}
+                            (listID[2]+1)->{dayTextView.text = list[listID[2]].day}
+                            (listID[3]-1)->{dayTextView.text = list[listID[2]].day}
+                            (listID[3]+1)->{dayTextView.text = list[listID[3]].day}
+                            (listID[4]-1)->{dayTextView.text = list[listID[3]].day}
+                            (listID[4]+1)->{dayTextView.text = list[listID[4]].day}
+                        }
+                    }
+                    prevItemPos = firstItemPosition
+                }
+            })
+        }
+
 
 
         return view
