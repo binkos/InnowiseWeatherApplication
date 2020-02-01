@@ -31,7 +31,7 @@ class MainPresenter(private var view:IMainView?,private val someTypesHelper: Som
                 it.list?.forEach {
                     val array = someTypesHelper.parseFunction(it.dtTxt!!)
                     val parceledDay = someTypesHelper.anotherParcelFunction(array[1])
-                    if (array[0]==0&&arrayList.size!=1) arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE, day = parceledDay))
+                    if (array[0]==0&&arrayList.size!=0) arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.HEADER_TYPE, day = parceledDay))
                     if (array[0]==21){
                     arrayList.add(RecyclerItemWeatherClass(RecyclerItemWeatherClass.WEATHER_TYPE_WITHOUT_DIVIDERS,it.weather[0].icon,
                         it.main!!.temp-273,it.weather[0].main,parceledDay,array[0]))
