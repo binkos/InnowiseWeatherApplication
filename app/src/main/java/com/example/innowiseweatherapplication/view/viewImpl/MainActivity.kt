@@ -14,9 +14,10 @@ import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.innowiseweatherapplication.R
 import com.example.innowiseweatherapplication.adapter.TabsPagerAdapter
+import com.example.innowiseweatherapplication.dagger.ContextModule
+import com.example.innowiseweatherapplication.dagger.DaggerDaggerComponent
 import com.example.innowiseweatherapplication.model.entity.RecyclerItemWeatherClass
 import com.example.innowiseweatherapplication.model.entity.TodayWeatherClass
-import com.example.innowiseweatherapplication.model.modelImpl.SomeTypesHelper
 import com.example.innowiseweatherapplication.presenter.presenterImpl.MainPresenter
 import com.example.innowiseweatherapplication.view.IMainView
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -43,9 +44,14 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun init(){
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        val someTypesHelper = SomeTypesHelper(applicationContext)
-        mainPresenter = MainPresenter(this,someTypesHelper)
+
+        val dagger = DaggerDaggerComponent.builder().contextModule(ContextModule(this)).build()
+
+        mainPresenter = dagger.getPresenter()
+        mainPresenter.onAttach(this)
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabs)
 

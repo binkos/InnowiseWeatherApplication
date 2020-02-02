@@ -15,12 +15,16 @@ import android.os.Looper
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.startActivity
+import com.example.innowiseweatherapplication.dagger.ContextModule
 import com.google.android.gms.location.*
+import dagger.Module
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @Suppress("DEPRECATION")
-class SomeTypesHelper(private val context:Context) {
+@Module(includes = [ContextModule::class])
+class SomeTypesHelper @Inject constructor (private val context:Context) {
     var mFusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     private var mLocation:Location? = null
 
@@ -31,7 +35,7 @@ class SomeTypesHelper(private val context:Context) {
         mLocationRequest.interval = 0
         mLocationRequest.fastestInterval = 0
         mLocationRequest.numUpdates = 1
-    println("HERE")
+        println("HERE")
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,

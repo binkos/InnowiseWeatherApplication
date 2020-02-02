@@ -11,13 +11,17 @@ import com.example.innowiseweatherapplication.view.IMainView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainPresenter(private var view:IMainView?,private val someTypesHelper: SomeTypesHelper):
+class MainPresenter @Inject constructor(private val someTypesHelper: SomeTypesHelper):
     IMainPresenterInterface {
+    private var view:IMainView? = null
     private val model = MainModel()
     lateinit var weather:WeatherClass
 
-
+    fun onAttach(view: IMainView){
+        this.view=view
+    }
 
     @SuppressLint("CheckResult")
     override fun getData(cityName:String) {
