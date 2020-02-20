@@ -5,4 +5,26 @@
     <string name="desciption">Desciption</string>
     <string name="mem">Mem</string>
     <string name="today">Today</string>
+    <string name="login">Login</string>
+    <string name="forgot_a_password"><u>Forgot a password</u></string>
+    <string name="password">Password</string>
+    <string name="sign_up_with">Sign Up With</string>
+    <string name="don_t_you_have_an_account_yet">Don\'t you have an account yet?</string>
+    <string name="sign_up"><u>Sign Up</u></string>
+    <string name="enter_your_login_or_e_mail">Enter your login or E-mail</string>
+    <string name="new_password">New password</string>
+    <string name="repeat_new_password">Repeat new password</string>
+    <string name="create">Create</string>
+    <string name="e_mail">E-mail</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="registrate">Registrate</string>
+    <string name="phone_number">Phone number</string>
+    <string name="aim_of_using">Aim of using</string>
+    <string name="choose_date_of_birth">Choose date of birth</string>
+    <string name="continue_string">Continue</string>
+    <string name="address">Address</string>
+    <string name="choose_your_gender">Choose your gender</string>
+    <string name="work">Work</string>
+    <string name="accept">Accept</string>
+    <string name="click_here_to_pick_date">Click here to pick Date</string>
 </resources>
